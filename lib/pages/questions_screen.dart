@@ -4,7 +4,10 @@ import 'package:quizz_app_udemy/components/answer_button.dart';
 import 'package:quizz_app_udemy/data/questions.dart';
 
 class QuestionsScreen extends StatefulWidget {
-  const QuestionsScreen({super.key});
+  const QuestionsScreen({super.key, required this.onSelectAnswer});
+
+  //pass selected answer as a prop function
+  final void Function(String answer) onSelectAnswer;
 
   @override
   State<QuestionsScreen> createState() => _QuestionsScreenState();
@@ -12,8 +15,9 @@ class QuestionsScreen extends StatefulWidget {
 
 class _QuestionsScreenState extends State<QuestionsScreen> {
   var currentQuestionIndex = 0;
-
-  void answerQuestion() {
+  // function to go to next question and also pass data as a prop to result screen.
+  void answerQuestion(String selectedAnswer) {
+    widget.onSelectAnswer(selectedAnswer);
     setState(() {
       currentQuestionIndex++; // Incrementing value by one
     });
@@ -47,7 +51,10 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                   margin: const EdgeInsets.symmetric(vertical: 5),
                   child: AnswerButton(
                     answerText: answer,
-                    onTap: answerQuestion,
+                    onTap: () {
+                      //passing answer as argument to be stored in a list in the Quiz.dart file.
+                      answerQuestion(answer);
+                    },
                   ),
                 );
               },

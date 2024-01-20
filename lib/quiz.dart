@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quizz_app_udemy/data/questions.dart';
 import 'package:quizz_app_udemy/pages/questions_screen.dart';
+import 'package:quizz_app_udemy/pages/results_screen.dart';
 import 'package:quizz_app_udemy/pages/start_screen.dart';
 
 class Quiz extends StatefulWidget {
@@ -10,6 +12,8 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
+  // list where selected answers will be stored in memory after choosing answer
+  List<String> selectedAnswers = [];
   var activeScreen = 'start-screen';
 
   void switchScreen() {
@@ -18,14 +22,35 @@ class _QuizState extends State<Quiz> {
     });
   }
 
+  void chooseAnswer(String answer) {
+    // add method for adding selected answer from questions_screen to selectedAnswers list.
+    selectedAnswers.add(answer);
+
+    if (selectedAnswers.length == questions.length) {
+      setState(() {
+        selectedAnswers = []; //reset selected answers to empty list
+        activeScreen = 'results-screen';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Widget that switches between different screens depending on which is clicked
     Widget screenWidget = StartScreen(
       startQuiz: switchScreen,
     );
 
     if (activeScreen == 'questions-screen') {
-      screenWidget = const QuestionsScreen();
+      screenWidget = QuestionsScreen(
+        onSelectAnswer: chooseAnswer,
+      );
+    }
+
+    if (activeScreen == 'results-screen') {
+      screenWidget = ResultsScreen(
+        chosenAnswers: selectedAnswers,
+      );
     }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
