@@ -13,7 +13,7 @@ class Quiz extends StatefulWidget {
 
 class _QuizState extends State<Quiz> {
   // list where selected answers will be stored in memory after choosing answer
-  List<String> selectedAnswers = [];
+  List<String> _selectedAnswers = [];
   var activeScreen = 'start-screen';
 
   void switchScreen() {
@@ -24,9 +24,9 @@ class _QuizState extends State<Quiz> {
 
   void chooseAnswer(String answer) {
     // add method for adding selected answer from questions_screen to selectedAnswers list.
-    selectedAnswers.add(answer);
+    _selectedAnswers.add(answer);
 
-    if (selectedAnswers.length == questions.length) {
+    if (_selectedAnswers.length == questions.length) {
       setState(() {
         activeScreen = 'results-screen';
       });
@@ -35,7 +35,7 @@ class _QuizState extends State<Quiz> {
 
   void restartQuiz() {
     setState(() {
-      selectedAnswers = []; //reset selected answers to empty list
+      _selectedAnswers = []; //reset selected answers to empty list
       activeScreen = 'questions-screen';
     });
   }
@@ -55,7 +55,7 @@ class _QuizState extends State<Quiz> {
 
     if (activeScreen == 'results-screen') {
       screenWidget = ResultsScreen(
-        chosenAnswers: selectedAnswers,
+        chosenAnswers: _selectedAnswers,
         onRestart: restartQuiz,
       );
     }
